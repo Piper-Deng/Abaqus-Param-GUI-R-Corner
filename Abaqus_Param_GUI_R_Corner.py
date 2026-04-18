@@ -518,7 +518,7 @@ class AbaqusParamGui(object):
             with open(script_path, "r") as f:
                 text = f.read()
         except Exception as exc:
-            mb.showerror("Read Error", "Failed to read script:\n%s" % exc)
+            mb.showerror("Read Error", "Failed to read script (%s)." % exc.__class__.__name__)
             return
 
         params, _start, _end = parse_parameters(text)
@@ -579,7 +579,7 @@ class AbaqusParamGui(object):
     def _run_subprocess_thread(self, cmd, cwd, temp_script, mode_name):
         try:
             self.log("[%s] Running command:" % mode_name)
-            self.log("  %s" % " ".join(cmd))
+            self.log("  (command hidden for privacy)")
 
             proc = subprocess.Popen(
                 cmd,
@@ -601,13 +601,13 @@ class AbaqusParamGui(object):
                 self.log("[%s] Failed. Check log above." % mode_name)
 
         except Exception as exc:
-            self.log("[%s] Error: %s" % (mode_name, exc))
+            self.log("[%s] Error: %s" % (mode_name, exc.__class__.__name__))
         finally:
             try:
                 if os.path.isfile(temp_script):
                     os.remove(temp_script)
             except Exception as exc:
-                self.log("Could not remove temp script %s: %s" % (temp_script, exc))
+                self.log("Could not remove temp script: %s" % exc.__class__.__name__)
 
             self.root.after(0, self._set_buttons_state, "normal")
 
@@ -629,7 +629,7 @@ class AbaqusParamGui(object):
         try:
             temp_script = self._write_temp_script(append_tail="")
         except Exception as exc:
-            mb.showerror("Prepare Error", "Failed to prepare script:\n%s" % exc)
+            mb.showerror("Prepare Error", "Failed to prepare script (%s)." % exc.__class__.__name__)
             return
 
         self._set_buttons_state("disabled")
@@ -663,14 +663,14 @@ class AbaqusParamGui(object):
             if not os.path.isdir(out_dir):
                 os.makedirs(out_dir)
         except Exception as exc:
-            mb.showerror("Output Error", "Failed to create output directory:\n%s" % exc)
+            mb.showerror("Output Error", "Failed to create output directory (%s)." % exc.__class__.__name__)
             return
 
         try:
             tail = build_inp_export_tail(out_dir)
             temp_script = self._write_temp_script(append_tail=tail)
         except Exception as exc:
-            mb.showerror("Prepare Error", "Failed to prepare export script:\n%s" % exc)
+            mb.showerror("Prepare Error", "Failed to prepare export script (%s)." % exc.__class__.__name__)
             return
 
         self._set_buttons_state("disabled")

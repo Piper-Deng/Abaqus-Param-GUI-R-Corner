@@ -1,4 +1,4 @@
-# Abaqus Parameter GUI (Minimal Public Release)
+# Abaqus Parameter GUI (Public Release)
 
 This repository contains a minimal public release with only:
 
